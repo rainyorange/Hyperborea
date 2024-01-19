@@ -1,6 +1,7 @@
 ﻿using ECommons.GameHelpers;
 using ECommons.SimpleGui;
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
+using Hyperborea.ECommons_CNExtra;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +38,7 @@ public unsafe class CompassWindow : Window
             var phase = Utils.GetPhase(Svc.ClientState.TerritoryType);
             var index = array.IndexOf(phase);
 
-            ImGuiEx.SetNextItemWidthScaled(250f);
+            ImGuiEx_Extend.SetNextItemWidthScaled(250f);
             if(ImGui.BeginCombo("##selphase", $"{phase?.Name.NullWhenEmpty() ?? "Select phase"}"))
             {
                 foreach(var x in array)
@@ -87,14 +88,14 @@ public unsafe class CompassWindow : Window
             ImGui.SameLine();
             if (ImGuiEx.IconButton("\uf3c5"))
             {
-                Player.GameObject->SetPosition(Position.X, Position.Y, Position.Z);
+               GameObject_Extend.SetObjectPos(Player.GameObject, Position.X, Position.Y, Position.Z);
             }
             ImGuiEx.Tooltip("Teleport to the configured coordinates.");
             ImGui.SameLine();
             if (ImGuiEx.IconButton("\uf030"))
             {
-                var cam = (CameraEx*)CameraManager.Instance()->GetActiveCamera();
-                Player.GameObject->SetPosition(cam->x, cam->y, cam->z);
+                var cam = (CameraEx*)CameraManager.Instance->GetActiveCamera();
+                GameObject_Extend.SetObjectPos(Player.GameObject, cam->x, cam->y, cam->z);
             }
             ImGuiEx.Tooltip("Teleport to the location of the camera.");
         }

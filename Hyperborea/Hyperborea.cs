@@ -15,6 +15,8 @@ namespace Hyperborea;
 
 public unsafe class Hyperborea : IDalamudPlugin
 {
+    string IDalamudPlugin.Name => "Hyperborea";
+
     public static Hyperborea P;
     public Memory Memory;
     public SettingsWindow SettingsWindow;
@@ -24,6 +26,7 @@ public unsafe class Hyperborea : IDalamudPlugin
     Config Config;
     public Dictionary<uint, List<byte>> Weathers;
     public static Config C => P.Config;
+
     public ZoneData ZoneData;
     public TaskManager TaskManager;
     public Random Random = new();
@@ -41,13 +44,13 @@ public unsafe class Hyperborea : IDalamudPlugin
 
         new TickScheduler(() =>
         {
-            EzConfig.DefaultSerializationFactory = YamlFactory;
+            EzConfigNew.DefaultSerializationFactory = YamlFactory;
             var scale = ImGui.GetIO().FontGlobalScale;
             var constraint = new Window.WindowSizeConstraints() { MinimumSize = new(300f * scale, 100f), MaximumSize = new(300f * scale, 1000f) };
             constraint.MaximumSize /= ImGuiHelpers.GlobalScale ;
             constraint.MinimumSize /= ImGuiHelpers.GlobalScale ;
 
-            Config = EzConfig.Init<Config>();
+            Config = EzConfigNew.Init<Config>();
             EzConfigGui.Init(UI.DrawNeo);
             EzConfigGui.Window.SizeConstraints = constraint;
             EzConfigGui.Window.Flags = ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoScrollbar;
@@ -60,7 +63,7 @@ public unsafe class Hyperborea : IDalamudPlugin
             new EzLogout(OnLogout);
             new EzTerritoryChanged(OnTerritoryChanged);
             TaskManager = new();
-            ZoneData = EzConfig.LoadConfiguration<ZoneData>(DataFileName);
+            ZoneData = EzConfigNew.LoadConfiguration<ZoneData>(DataFileName);
             MapEffect.Init(OnMapEffect);
             EditorWindow = new();
             CompassWindow = new();
@@ -105,7 +108,7 @@ public unsafe class Hyperborea : IDalamudPlugin
         });*/
     }
 
-    public void SaveZoneData() => EzConfig.SaveConfiguration(ZoneData, DataFileName);
+    public void SaveZoneData() => EzConfigNew.SaveConfiguration(ZoneData, DataFileName);
 
     private void OnLogout()
     {

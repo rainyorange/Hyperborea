@@ -14,7 +14,7 @@ public unsafe class Memory
     [EzHook("40 55 56 57 41 56 41 57 48 83 EC 50 48 8B F9")]
     internal EzHook<LoadZone> LoadZoneHook;
 
-    const string PacketDispatcher_OnReceivePacketHookSig = "40 53 56 48 81 EC ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 33 C4 48 89 44 24 ?? 8B F2";
+    const string PacketDispatcher_OnReceivePacketHookSig = "40 55 56 57 48 8D 6C 24 ?? 48 81 EC ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 33 C4 48 89 45 ?? 8B ?? 49 8B ??";
     internal delegate void PacketDispatcher_OnReceivePacket(nint a1, uint a2, nint a3);
     [EzHook(PacketDispatcher_OnReceivePacketHookSig, false)]
     internal EzHook<PacketDispatcher_OnReceivePacket> PacketDispatcher_OnReceivePacketHook;
@@ -87,7 +87,7 @@ public unsafe class Memory
         {
             var opcode = *(ushort*)(a3 + 2);
             var dataPtr = a3 + 16;
-            if(opcode == 0xE2)
+            if(opcode == 0x29D) // 48 89 5C 24 ? 57 48 ? ? ? 48 ? ? 48 ? ? 8B ? B1 ? 45 ? ? E8 ? ? ? ? 48 ? ? 74
             {
                 var acopcode = *(ushort*)(dataPtr);
                 var data = "";
@@ -137,11 +137,11 @@ public unsafe class Memory
 
         try
         {
-            var opcode = *(ushort*)a2;
+            var opcode = *(ushort*) a2;
 
             switch (opcode)
             {
-                case 499:
+                case 942:
                     PluginLog.Verbose($"[HyperFirewall] Passing outgoing packet with opcode {opcode} through.");
                     return PacketDispatcher_OnSendPacketHook.Original(a1, a2, a3, a4);
 
@@ -174,8 +174,7 @@ public unsafe class Memory
 
             switch (opcode)
             {
-                case 593:
-                case 660:
+                case 0x302: // ActorControlSelf
                     PluginLog.Verbose($"[HyperFirewall] Passing incoming packet with opcode {opcode} through.");
                     PacketDispatcher_OnReceivePacketHook.Original(a1, a2, a3);
                     return;

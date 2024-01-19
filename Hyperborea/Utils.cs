@@ -9,6 +9,7 @@ using FFXIVClientStructs.FFXIV.Client.Game.Control;
 using FFXIVClientStructs.FFXIV.Client.Game.Event;
 using FFXIVClientStructs.FFXIV.Client.Graphics.Environment;
 using FFXIVClientStructs.FFXIV.Client.LayoutEngine;
+using Hyperborea.ECommons_CNExtra;
 using Hyperborea.Gui;
 using Lumina.Excel.GeneratedSheets;
 using System.Globalization;
@@ -19,18 +20,18 @@ public unsafe static class Utils
 {
     public static void LoadBuiltInZoneData()
     {
-        P.BuiltInZoneData = EzConfig.LoadConfiguration<ZoneData>(Path.Combine(Svc.PluginInterface.AssemblyLocation.Directory.FullName, "data.yaml"));
+        P.BuiltInZoneData = EzConfigNew.LoadConfiguration<ZoneData>(Path.Combine(Svc.PluginInterface.AssemblyLocation.Directory.FullName, "data.yaml"));
     }
 
     public static bool TryGetZoneData(string bg, out ZoneInfo info) => TryGetZoneData(bg, out info, out _);
 
     public static bool TryGetZoneData(string bg, out ZoneInfo info, out bool isOverriden)
     {
-        info = GetZoneInto(bg, out isOverriden);
+        info = GetZoneInfo(bg, out isOverriden);
         return info != null;
     }
 
-    public static ZoneInfo GetZoneInto(string bg, out bool isOverriden)
+    public static ZoneInfo GetZoneInfo(string bg, out bool isOverriden)
     {
         isOverriden = false;
         {
@@ -137,7 +138,7 @@ public unsafe static class Utils
         {
             foreach(var x in phase.MapEffects)
             {
-                MapEffect.Delegate(Utils.GetMapEffectModule(), (uint)x.a1, (ushort)x.a2, (ushort)x.a3);
+                MapEffect.ProcessMapEffectHook?.OriginalDisposeSafe(Utils.GetMapEffectModule(), (uint)x.a1, (ushort)x.a2, (ushort)x.a3);
             }
         }
     }
@@ -157,7 +158,7 @@ public unsafe static class Utils
         return Vector3.DistanceSquared(v, o) < 1;
     }
   
-    public static Vector3 CameraPos => *(Vector3*)((nint)CameraManager.Instance()->GetActiveCamera() + 0x60);
+    public static Vector3 CameraPos => *(Vector3*)((nint)CameraManager.Instance->GetActiveCamera() + 0x60);
 
     public static bool TryFindBytes(this byte[] haystack, byte[] needle, out int pos)
     {
@@ -228,7 +229,7 @@ public unsafe static class Utils
         {
             x.Struct()->DisableDraw();
         }
-        var content = ExcelTerritoryHelper.Get((uint)territory).ContentFinderCondition?.Value?.Content;
+        var content = ExcelTerritoryHelper_Extend.Get(territory).ContentFinderCondition?.Value?.Content;
         if (content != null && content != 0)
         {
             P.Memory.SetupInstanceContentHook.Detour((nint)EventFramework.Instance(), 0x80030000 + content.Value, content.Value, 0);
@@ -242,7 +243,7 @@ public unsafe static class Utils
         {
             if (setPosition && value.Spawn != null)
             {
-                Player.GameObject->SetPosition(value.Spawn.X, value.Spawn.Y, value.Spawn.Z);
+                GameObject_Extend.SetObjectPos(Player.GameObject, value.Spawn.X, value.Spawn.Y, value.Spawn.Z);
             }
             if (setPhase && value.Phases.Count > 0)
             {
@@ -268,7 +269,7 @@ public unsafe static class Utils
     {
         if (UI.SavedPos != null)
         {
-            Player.GameObject->SetPosition(UI.SavedPos.Value.X, UI.SavedPos.Value.Y, UI.SavedPos.Value.Z);
+            GameObject_Extend.SetObjectPos(Player.GameObject, UI.SavedPos.Value.X, UI.SavedPos.Value.Y, UI.SavedPos.Value.Z);
         }
         if (UI.SavedZoneState != null)
         {

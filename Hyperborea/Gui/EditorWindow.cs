@@ -4,12 +4,14 @@ using ECommons.ExcelServices;
 using ECommons.GameHelpers;
 using ECommons.ImGuiMethods.TerritorySelection;
 using ECommons.SimpleGui;
+using Hyperborea.ECommons_CNExtra;
 using Lumina.Excel.GeneratedSheets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Hyperborea.Gui;
 public class EditorWindow : Window
@@ -22,7 +24,7 @@ public class EditorWindow : Window
         EzConfigGui.WindowSystem.AddWindow(this);
         foreach(var x in Svc.Data.GetExcelSheet<TerritoryType>())
         {
-            var bg = x.GetBG();
+            var bg = x.Bg?.ExtractText();
             if (!bg.IsNullOrEmpty())
             {
                 if(!BgToTerritoryType.TryGetValue(bg, out var list))
@@ -40,7 +42,7 @@ public class EditorWindow : Window
         var cur = ImGui.GetCursorPos();
         ImGui.PushFont(UiBuilder.IconFont);
         ImGui.SetCursorPosX(ImGuiEx.GetWindowContentRegionWidth() - ImGui.CalcTextSize("\uf0c7").X);
-        if(Utils.TryGetZoneData(ExcelTerritoryHelper.GetBG(TerrID), out _, out var isOverriden1))
+        if(Utils.TryGetZoneData(ExcelTerritoryHelper_Extend.GetBG(TerrID), out _, out var isOverriden1))
         {
             if (isOverriden1)
             {
@@ -62,7 +64,7 @@ public class EditorWindow : Window
             ImGuiEx.Tooltip("No configuration found for this zone in either the master or override data file(s).");
         }
         ImGui.SetCursorPos(cur);
-        var shares = BgToTerritoryType.TryGetValue(ExcelTerritoryHelper.GetBG(TerrID), out var set) ? set : [];
+        var shares = BgToTerritoryType.TryGetValue(ExcelTerritoryHelper_Extend.GetBG(TerrID), out var set) ? set : [];
         ImGuiEx.TextWrapped($"Currently editing: {ExcelTerritoryHelper.GetName(TerrID, true)}");
         if(shares.Count > 1)
         {
@@ -81,7 +83,8 @@ public class EditorWindow : Window
             SelectedTerritory = 0;
         }
 
-        var bg = ExcelTerritoryHelper.GetBG(TerrID);
+        var bg = ExcelTerritoryHelper_Extend.GetBG(TerrID);
+        ImGuiEx.Text($"BG: {bg}");
         if (bg.IsNullOrEmpty())
         {
             ImGuiEx.Text($"This zone is unsupported");
@@ -109,7 +112,7 @@ public class EditorWindow : Window
                 ImGui.Separator();
                 ImGuiEx.TextV("Phases:");
                 ImGui.SameLine();
-                if (ImGuiEx.IconButton(FontAwesome.Plus))
+                if (ImGuiEx.IconButton(FontAwesomeIcon.Plus))
                 {
                     info.Phases.Add(new());
                 }
@@ -121,10 +124,10 @@ public class EditorWindow : Window
                     {
                         ImGuiEx.TextV($"Name:");
                         ImGui.SameLine();
-                        ImGuiEx.SetNextItemWidthScaled(150f);
+                        ImGuiEx_Extend.SetNextItemWidthScaled(150f);
                         ImGui.InputText($"##Name", ref p.Name, 20);
                         ImGui.SameLine();
-                        if (ImGuiEx.IconButton(FontAwesome.Trash) && ImGuiEx.Ctrl)
+                        if (ImGuiEx.IconButton(FontAwesomeIcon.Trash) && ImGuiEx_Extend.Ctrl)
                         {
                             new TickScheduler(() => info.Phases.RemoveAll(z => z.GUID == p.GUID));
                         }
@@ -144,7 +147,7 @@ public class EditorWindow : Window
                         }
                         ImGuiEx.TextV($"MapEffects:");
                         ImGui.SameLine();
-                        if (ImGuiEx.IconButton(FontAwesome.Plus))
+                        if (ImGuiEx.IconButton(FontAwesomeIcon.Plus))
                         {
                             p.MapEffects.Add(new());
                         }
@@ -164,13 +167,13 @@ public class EditorWindow : Window
                         foreach (var x in p.MapEffects)
                         {
                             ImGui.PushID(x.GUID);
-                            ImGuiEx.SetNextItemWidthScaled(100f);
+                            ImGuiEx_Extend.SetNextItemWidthScaled(100f);
                             ImGui.InputInt($"##a1", ref x.a1);
                             ImGui.SameLine();
-                            ImGuiEx.SetNextItemWidthScaled(100f);
+                            ImGuiEx_Extend.SetNextItemWidthScaled(100f);
                             ImGui.InputInt($"##a2", ref x.a2);
                             ImGui.SameLine();
-                            ImGuiEx.SetNextItemWidthScaled(100f);
+                            ImGuiEx_Extend.SetNextItemWidthScaled(100f);
                             ImGui.InputInt($"##a3", ref x.a3);
                             ImGui.SameLine();
                             if (ImGui.Button("Delete"))
@@ -205,7 +208,7 @@ public class EditorWindow : Window
                 ImGuiEx.Text($"No data found");
                 if (ImGui.Button("Create override"))
                 {
-                    Utils.CreateZoneInfoOverride(bg, new()
+                    Utils.CreateZoneInfoOverride(bg, new ZoneInfo()
                     {
                         Name = ExcelTerritoryHelper.GetName(TerrID),
                     });
@@ -213,4 +216,7 @@ public class EditorWindow : Window
             }
         }
     }
+
+    public void Copy(string text) => Clipboard.SetText(text);
+    public string Paste() => Clipboard.GetText();
 }
