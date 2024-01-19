@@ -42,7 +42,7 @@ public unsafe static class UI
                 SavedPos = null;
                 SavedZoneState = null;
                 P.Memory.DisableFirewall();
-                P.Memory.TargetSystem_InteractWithObjectHook.Disable();
+                P.Memory.TargetSystem_InteractWithObjectHook.Pause();
             }
         }
 
