@@ -209,18 +209,12 @@ public unsafe static class UI
                         if (SpawnOverride)
                         {
                             // Player.GameObject->SetPosition(Position.X, Position.Y, Position.Z);
-
-                            Player.GameObject->Position.X = Position.X;
-                            Player.GameObject->Position.Y = Position.Y;
-                            Player.GameObject->Position.Z = Position.Z;
+                            GameObject_Extend.SetObjectPos(Player.GameObject, Position.X, Position.Y, Position.Z);
                         }
                         else if (info2 != null && info2.Spawn != null)
                         {
                             // Player.GameObject->SetPosition(info2.Spawn.X, info2.Spawn.Y, info2.Spawn.Z);
-
-                            Player.GameObject->Position.X = info2.Spawn.X;
-                            Player.GameObject->Position.Y = info2.Spawn.Y;
-                            Player.GameObject->Position.Z = info2.Spawn.Z;
+                            GameObject_Extend.SetObjectPos(Player.GameObject, info2.Spawn.X, info2.Spawn.Y, info2.Spawn.Z);
                         }
                     }
                     if (disabled) ImGui.EndDisabled();
