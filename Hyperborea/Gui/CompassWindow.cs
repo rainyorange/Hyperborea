@@ -1,7 +1,6 @@
 ﻿using ECommons.GameHelpers;
 using ECommons.SimpleGui;
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
-using Hyperborea.ECommons_CNExtra;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,7 +37,7 @@ public unsafe class CompassWindow : Window
             var phase = Utils.GetPhase(Svc.ClientState.TerritoryType);
             var index = array.IndexOf(phase);
 
-            ImGuiEx_Extend.SetNextItemWidthScaled(250f);
+            ImGuiEx.SetNextItemWidthScaled(250f);
             if(ImGui.BeginCombo("##selphase", $"{phase?.Name.NullWhenEmpty() ?? "Select phase"}"))
             {
                 foreach(var x in array)
@@ -88,7 +87,7 @@ public unsafe class CompassWindow : Window
             ImGui.SameLine();
             if (ImGuiEx.IconButton("\uf3c5"))
             {
-               GameObject_Extend.SetObjectPos(Player.GameObject, Position.X, Position.Y, Position.Z);
+                GameObject_Extend.SetObjectPos(Player.GameObject, Position.X, Position.Y, Position.Z);
             }
             ImGuiEx.Tooltip("Teleport to the configured coordinates.");
             ImGui.SameLine();

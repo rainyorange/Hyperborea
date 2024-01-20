@@ -44,13 +44,13 @@ public unsafe class Hyperborea : IDalamudPlugin
 
         new TickScheduler(() =>
         {
-            EzConfigNew.DefaultSerializationFactory = YamlFactory;
+            EzConfig.DefaultSerializationFactory = YamlFactory;
             var scale = ImGui.GetIO().FontGlobalScale;
             var constraint = new Window.WindowSizeConstraints() { MinimumSize = new(300f * scale, 100f), MaximumSize = new(300f * scale, 1000f) };
             constraint.MaximumSize /= ImGuiHelpers.GlobalScale ;
             constraint.MinimumSize /= ImGuiHelpers.GlobalScale ;
 
-            Config = EzConfigNew.Init<Config>();
+            Config = EzConfig.Init<Config>();
             EzConfigGui.Init(UI.DrawNeo);
             EzConfigGui.Window.SizeConstraints = constraint;
             EzConfigGui.Window.Flags = ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoScrollbar;
@@ -63,7 +63,7 @@ public unsafe class Hyperborea : IDalamudPlugin
             new EzLogout(OnLogout);
             new EzTerritoryChanged(OnTerritoryChanged);
             TaskManager = new();
-            ZoneData = EzConfigNew.LoadConfiguration<ZoneData>(DataFileName);
+            ZoneData = EzConfig.LoadConfiguration<ZoneData>(DataFileName);
             MapEffect.Init(OnMapEffect);
             EditorWindow = new();
             CompassWindow = new();
@@ -108,7 +108,7 @@ public unsafe class Hyperborea : IDalamudPlugin
         });*/
     }
 
-    public void SaveZoneData() => EzConfigNew.SaveConfiguration(ZoneData, DataFileName);
+    public void SaveZoneData() => EzConfig.SaveConfiguration(ZoneData, DataFileName);
 
     private void OnLogout()
     {

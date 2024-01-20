@@ -4,7 +4,6 @@ using ECommons.ExcelServices;
 using ECommons.GameHelpers;
 using ECommons.ImGuiMethods.TerritorySelection;
 using ECommons.SimpleGui;
-using Hyperborea.ECommons_CNExtra;
 using Lumina.Excel.GeneratedSheets;
 using System;
 using System.Collections.Generic;
@@ -42,7 +41,7 @@ public class EditorWindow : Window
         var cur = ImGui.GetCursorPos();
         ImGui.PushFont(UiBuilder.IconFont);
         ImGui.SetCursorPosX(ImGuiEx.GetWindowContentRegionWidth() - ImGui.CalcTextSize("\uf0c7").X);
-        if(Utils.TryGetZoneData(ExcelTerritoryHelper_Extend.GetBG(TerrID), out _, out var isOverriden1))
+        if(Utils.TryGetZoneData(ExcelTerritoryHelper.GetBG(TerrID), out _, out var isOverriden1))
         {
             if (isOverriden1)
             {
@@ -64,7 +63,7 @@ public class EditorWindow : Window
             ImGuiEx.Tooltip("No configuration found for this zone in either the master or override data file(s).");
         }
         ImGui.SetCursorPos(cur);
-        var shares = BgToTerritoryType.TryGetValue(ExcelTerritoryHelper_Extend.GetBG(TerrID), out var set) ? set : [];
+        var shares = BgToTerritoryType.TryGetValue(ExcelTerritoryHelper.GetBG(TerrID), out var set) ? set : [];
         ImGuiEx.TextWrapped($"Currently editing: {ExcelTerritoryHelper.GetName(TerrID, true)}");
         if(shares.Count > 1)
         {
@@ -83,7 +82,7 @@ public class EditorWindow : Window
             SelectedTerritory = 0;
         }
 
-        var bg = ExcelTerritoryHelper_Extend.GetBG(TerrID);
+        var bg = ExcelTerritoryHelper.GetBG(TerrID);
         ImGuiEx.Text($"BG: {bg}");
         if (bg.IsNullOrEmpty())
         {
@@ -124,10 +123,10 @@ public class EditorWindow : Window
                     {
                         ImGuiEx.TextV($"Name:");
                         ImGui.SameLine();
-                        ImGuiEx_Extend.SetNextItemWidthScaled(150f);
+                        ImGuiEx.SetNextItemWidthScaled(150f);
                         ImGui.InputText($"##Name", ref p.Name, 20);
                         ImGui.SameLine();
-                        if (ImGuiEx.IconButton(FontAwesomeIcon.Trash) && ImGuiEx_Extend.Ctrl)
+                        if (ImGuiEx.IconButton(FontAwesomeIcon.Trash) && ImGuiEx.Ctrl)
                         {
                             new TickScheduler(() => info.Phases.RemoveAll(z => z.GUID == p.GUID));
                         }
@@ -167,13 +166,13 @@ public class EditorWindow : Window
                         foreach (var x in p.MapEffects)
                         {
                             ImGui.PushID(x.GUID);
-                            ImGuiEx_Extend.SetNextItemWidthScaled(100f);
+                            ImGuiEx.SetNextItemWidthScaled(100f);
                             ImGui.InputInt($"##a1", ref x.a1);
                             ImGui.SameLine();
-                            ImGuiEx_Extend.SetNextItemWidthScaled(100f);
+                            ImGuiEx.SetNextItemWidthScaled(100f);
                             ImGui.InputInt($"##a2", ref x.a2);
                             ImGui.SameLine();
-                            ImGuiEx_Extend.SetNextItemWidthScaled(100f);
+                            ImGuiEx.SetNextItemWidthScaled(100f);
                             ImGui.InputInt($"##a3", ref x.a3);
                             ImGui.SameLine();
                             if (ImGui.Button("Delete"))
