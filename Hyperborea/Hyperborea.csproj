@@ -27,10 +27,6 @@
         <DalamudLibPath Condition="$(DALAMUD_HOME) != ''">$(DALAMUD_HOME)/</DalamudLibPath>
     </PropertyGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\ECommons\ECommons\ECommons.csproj" />
-    </ItemGroup>
-
     <PropertyGroup Condition="Exists('..\..\DalamudDep')">
         <DalamudLibPath>..\..\DalamudDep\</DalamudLibPath>
     </PropertyGroup>
@@ -38,6 +34,7 @@
     <ItemGroup>
         <PackageReference Include="DalamudPackager" Version="2.1.10" />
         <PackageReference Include="YamlDotNet" Version="13.7.1" />
+        <ProjectReference Include="..\ECommons\ECommons\ECommons.csproj" />
         <Reference Include="Newtonsoft.Json">
             <HintPath>$(DalamudLibPath)Newtonsoft.Json.dll</HintPath>
             <Private>False</Private>

@@ -6,7 +6,6 @@ using ECommons.ImGuiMethods.TerritorySelection;
 using FFXIVClientStructs.FFXIV.Client.Game.Event;
 using FFXIVClientStructs.FFXIV.Client.Graphics.Environment;
 using FFXIVClientStructs.FFXIV.Client.LayoutEngine;
-using Hyperborea.ECommons_CNExtra;
 using Lumina.Excel.GeneratedSheets;
 
 namespace Hyperborea.Gui;
@@ -49,7 +48,7 @@ public unsafe static class UI
         if (disableCheckbox)
         {
             ImGui.EndDisabled();
-            ImGuiEx_Extend.HelpMarker($"Hyperborea cannot be enabled as you are under the following restricted condition(s):\n{DisableReasons.Print("\n")}", ImGuiColors.DalamudOrange);
+            ImGuiEx.HelpMarker($"Hyperborea cannot be enabled as you are under the following restricted condition(s):\n{DisableReasons.Print("\n")}", ImGuiColors.DalamudOrange);
         }
 
         ImGuiEx.Text("Packet Filter:");
@@ -127,17 +126,17 @@ public unsafe static class UI
 
                 ImGui.SetCursorPos(cur);
                 ImGuiEx.TextV("Zone Data:");
-                ImGuiEx_Extend.SetNextItemWidthScaled(150);
+                ImGuiEx.SetNextItemWidthScaled(150);
                 var dis = TerritorySelector.Selectors.Any(x => x.IsOpen);
                 if (dis) ImGui.BeginDisabled();
                 ImGui.InputInt("Territory Type ID", ref a2);
                 if (dis) ImGui.EndDisabled();
-                if (ExcelTerritoryHelper_Extend.NameExists((uint)a2))
+                if (ExcelTerritoryHelper.NameExists((uint)a2))
                 {
                     ImGuiEx.Text(ExcelTerritoryHelper.GetName((uint)a2));
                 }
                 ImGuiEx.Text($"Additional Data:");
-                ImGuiEx_Extend.SetNextItemWidthScaled(150);
+                ImGuiEx.SetNextItemWidthScaled(150);
                 var StoryValues = Utils.GetStoryValues((uint)a2);
                 var disableda3 = !StoryValues.Any(x => x != 0);
                 if (disableda3) ImGui.BeginDisabled();
@@ -152,9 +151,9 @@ public unsafe static class UI
                 }
                 if (disableda3) ImGui.EndDisabled();
                 if (!StoryValues.Contains((uint)a3)) a3 = (int)StoryValues.FirstOrDefault();
-                ImGuiEx_Extend.SetNextItemWidthScaled(150);
+                ImGuiEx.SetNextItemWidthScaled(150);
                 ImGui.InputInt("Argument 4", ref a4);
-                ImGuiEx_Extend.SetNextItemWidthScaled(150);
+                ImGuiEx.SetNextItemWidthScaled(150);
                 ImGui.InputInt("Argument 5", ref a5);
 
                 ImGui.Checkbox($"Spawn Override:", ref SpawnOverride);
@@ -171,9 +170,9 @@ public unsafe static class UI
                 ImGuiHelpers.ScaledDummy(3f);
 
                 {
-                    var size = ImGuiEx_Extend.CalcIconSize("\uf3c5", true);
-                    size += ImGuiEx_Extend.CalcIconSize("\uf15c", true);
-                    size += ImGuiEx_Extend.CalcIconSize(FontAwesomeIcon.Cog, true);
+                    var size = ImGuiEx.CalcIconSize("\uf3c5", true);
+                    size += ImGuiEx.CalcIconSize("\uf15c", true);
+                    size += ImGuiEx.CalcIconSize(FontAwesomeIcon.Cog, true);
                     size.X += ImGui.GetStyle().ItemSpacing.X * 3;
 
                     var cur2 = ImGui.GetCursorPos();
@@ -208,12 +207,10 @@ public unsafe static class UI
                         Utils.LoadZone((uint)a2, !SpawnOverride, true, a3, a4, a5, a6);
                         if (SpawnOverride)
                         {
-                            // Player.GameObject->SetPosition(Position.X, Position.Y, Position.Z);
-                            GameObject_Extend.SetObjectPos(Player.GameObject, Position.X, Position.Y, Position.Z);
+                            GameObject_Extend.SetObjectPos(Player.GameObject,Position.X, Position.Y, Position.Z);
                         }
                         else if (info2 != null && info2.Spawn != null)
                         {
-                            // Player.GameObject->SetPosition(info2.Spawn.X, info2.Spawn.Y, info2.Spawn.Z);
                             GameObject_Extend.SetObjectPos(Player.GameObject, info2.Spawn.X, info2.Spawn.Y, info2.Spawn.Z);
                         }
                     }
@@ -241,7 +238,7 @@ public unsafe static class UI
     {
         ImGuiEx.TextV(t);
         ImGui.SameLine();
-        ImGuiEx_Extend.SetNextItemWidthScaled(60f);
+        ImGuiEx.SetNextItemWidthScaled(60f);
         ImGui.DragFloat("##" + t, ref p, 0.1f);
     }
 }
