@@ -89,7 +89,7 @@ public unsafe class CompassWindow : Window
             ImGui.SameLine();
             if (ImGuiEx.IconButton("\uf3c5"))
             {
-                Player.GameObject->SetPosition(PlayerPosition.X, PlayerPosition.Y, PlayerPosition.Z);
+                GameObject_Extend.SetObjectPos(Player.GameObject, PlayerPosition.X, PlayerPosition.Y, PlayerPosition.Z);
             }
             ImGuiEx.Tooltip("Teleport to the configured coordinates.");
             ImGui.SameLine();
@@ -133,7 +133,7 @@ public unsafe class CompassWindow : Window
             ImGui.SameLine();
             if (ImGuiEx.IconButton("\uf206"))
             {
-                Player.Character->Mount.CreateAndSetupMount((short)(Svc.Condition[ConditionFlag.Mounted] ? 0 : C.CurrentMount), 0, 0, 0, 0, 0, 0);
+                Memory.CreateAndSetupMount(Player.Character, (short)(Svc.Condition[ConditionFlag.Mounted] ? 0 : C.CurrentMount), 0, 0, 0, 0, 0);
             }
 
             ImGui.SameLine();

@@ -292,7 +292,7 @@ public unsafe static class Utils
 
     public static void Revert()
     {
-        if (Svc.Condition[ConditionFlag.Mounted]) Player.Character->Mount.CreateAndSetupMount(0, 0, 0, 0, 0, 0, 0);
+        if (Svc.Condition[ConditionFlag.Mounted]) Memory.CreateAndSetupMount(Player.Character, 0, 0, 0, 0, 0, 0);
         if (UI.SavedPos != null)
         {
             GameObject_Extend.SetObjectPos(Player.GameObject,UI.SavedPos.Value.X, UI.SavedPos.Value.Y, UI.SavedPos.Value.Z);
