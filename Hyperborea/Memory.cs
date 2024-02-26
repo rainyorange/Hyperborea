@@ -176,7 +176,7 @@ public unsafe class Memory
 
             switch (opcode)
             {
-                case 942:
+                case 0x3AE: // ClientHeartbeat
                     PluginLog.Verbose($"[HyperFirewall] Passing outgoing packet with opcode {opcode} through.");
                     return PacketDispatcher_OnSendPacketHook.Original(a1, a2, a3, a4);
 
