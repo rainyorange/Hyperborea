@@ -1,4 +1,5 @@
 using Dalamud.Interface.Components;
+using Dalamud.Interface.Utility;
 using ECommons.ExcelServices;
 using ECommons.ExcelServices.TerritoryEnumeration;
 using ECommons.GameHelpers;
@@ -215,11 +216,11 @@ public unsafe static class UI
                         Utils.LoadZone((uint)a2, !SpawnOverride, true, a3, a4, a5, a6);
                         if (SpawnOverride)
                         {
-                            GameObject_Extend.SetObjectPos(Player.GameObject,Position.X, Position.Y, Position.Z);
+                            Player.GameObject->SetPosition(Position.X, Position.Y, Position.Z);
                         }
                         else if (info2 != null && info2.Spawn != null)
                         {
-                            GameObject_Extend.SetObjectPos(Player.GameObject, info2.Spawn.X, info2.Spawn.Y, info2.Spawn.Z);
+                            Player.GameObject->SetPosition(info2.Spawn.X, info2.Spawn.Y, info2.Spawn.Z);
                         }
                     }
                     if (disabled) ImGui.EndDisabled();

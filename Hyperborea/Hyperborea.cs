@@ -1,4 +1,5 @@
 ﻿using Dalamud.Game.ClientState.Keys;
+using Dalamud.Interface.Utility;
 using Dalamud.Plugin.Services;
 using ECommons.Automation;
 using ECommons.Configuration;
@@ -97,7 +98,7 @@ public unsafe class Hyperborea : IDalamudPlugin
                         {
                             if (!IsLButtonPressed)
                             {
-                                GameObject_Extend.SetObjectPos(Player.GameObject, res.X, res.Y, res.Z);
+                                Player.GameObject->SetPosition(res.X, res.Y, res.Z);
                             }
                             IsLButtonPressed = true;
                         }
@@ -113,36 +114,36 @@ public unsafe class Hyperborea : IDalamudPlugin
                 if (Svc.KeyState.GetRawValue(VirtualKey.SPACE) != 0 || IsKeyPressed(LimitedKeys.Space))
                 {
                     Svc.KeyState.SetRawValue(VirtualKey.SPACE, 0);
-                    GameObject_Extend.SetObjectPos(Player.GameObject, Player.Object.Position.X, Player.Object.Position.Y + C.NoclipSpeed, Player.Object.Position.Z);
+                    Player.GameObject->SetPosition(Player.Object.Position.X, Player.Object.Position.Y + C.NoclipSpeed, Player.Object.Position.Z);
                 }
                 if (Svc.KeyState.GetRawValue(VirtualKey.LSHIFT) != 0 || IsKeyPressed(LimitedKeys.LeftShiftKey))
                 {
                     Svc.KeyState.SetRawValue(VirtualKey.LSHIFT, 0);
-                    GameObject_Extend.SetObjectPos(Player.GameObject, Player.Object.Position.X, Player.Object.Position.Y - C.NoclipSpeed, Player.Object.Position.Z);
+                    Player.GameObject->SetPosition(Player.Object.Position.X, Player.Object.Position.Y - C.NoclipSpeed, Player.Object.Position.Z);
                 }
                 if (Svc.KeyState.GetRawValue(VirtualKey.W) != 0 || IsKeyPressed(LimitedKeys.W))
                 {
-                    var newPoint = Utils.RotatePoint(Player.Object.Position.X, Player.Object.Position.Z, MathF.PI-((CameraEx*)CameraManager.Instance->GetActiveCamera())->currentHRotation, Player.Object.Position + new Vector3(0, 0, C.NoclipSpeed));
+                    var newPoint = Utils.RotatePoint(Player.Object.Position.X, Player.Object.Position.Z, MathF.PI-((CameraEx*)CameraManager.Instance()->GetActiveCamera())->currentHRotation, Player.Object.Position + new Vector3(0, 0, C.NoclipSpeed));
                     Svc.KeyState.SetRawValue(VirtualKey.W, 0);
-                    GameObject_Extend.SetObjectPos(Player.GameObject, newPoint.X, newPoint.Y, newPoint.Z);
+                    Player.GameObject->SetPosition(newPoint.X, newPoint.Y, newPoint.Z);
                 }
                 if (Svc.KeyState.GetRawValue(VirtualKey.S) != 0 || IsKeyPressed(LimitedKeys.S))
                 {
-                    var newPoint = Utils.RotatePoint(Player.Object.Position.X, Player.Object.Position.Z, MathF.PI - ((CameraEx*)CameraManager.Instance->GetActiveCamera())->currentHRotation, Player.Object.Position + new Vector3(0, 0, -C.NoclipSpeed));
+                    var newPoint = Utils.RotatePoint(Player.Object.Position.X, Player.Object.Position.Z, MathF.PI - ((CameraEx*)CameraManager.Instance()->GetActiveCamera())->currentHRotation, Player.Object.Position + new Vector3(0, 0, -C.NoclipSpeed));
                     Svc.KeyState.SetRawValue(VirtualKey.S, 0);
-                    GameObject_Extend.SetObjectPos(Player.GameObject, newPoint.X, newPoint.Y, newPoint.Z);
+                    Player.GameObject->SetPosition(newPoint.X, newPoint.Y, newPoint.Z);
                 }
                 if (Svc.KeyState.GetRawValue(VirtualKey.A) != 0 || IsKeyPressed(LimitedKeys.A))
                 {
-                    var newPoint = Utils.RotatePoint(Player.Object.Position.X, Player.Object.Position.Z, MathF.PI - ((CameraEx*)CameraManager.Instance->GetActiveCamera())->currentHRotation, Player.Object.Position + new Vector3(C.NoclipSpeed, 0, 0));
+                    var newPoint = Utils.RotatePoint(Player.Object.Position.X, Player.Object.Position.Z, MathF.PI - ((CameraEx*)CameraManager.Instance()->GetActiveCamera())->currentHRotation, Player.Object.Position + new Vector3(C.NoclipSpeed, 0, 0));
                     Svc.KeyState.SetRawValue(VirtualKey.A, 0);
-                    GameObject_Extend.SetObjectPos(Player.GameObject, newPoint.X, newPoint.Y, newPoint.Z);
+                    Player.GameObject->SetPosition(newPoint.X, newPoint.Y, newPoint.Z);
                 }
                 if (Svc.KeyState.GetRawValue(VirtualKey.D) != 0 || IsKeyPressed(LimitedKeys.D))
                 {
-                    var newPoint = Utils.RotatePoint(Player.Object.Position.X, Player.Object.Position.Z, MathF.PI - ((CameraEx*) CameraManager.Instance->GetActiveCamera())->currentHRotation, Player.Object.Position + new Vector3(-C.NoclipSpeed, 0, 0));
+                    var newPoint = Utils.RotatePoint(Player.Object.Position.X, Player.Object.Position.Z, MathF.PI - ((CameraEx*) CameraManager.Instance()->GetActiveCamera())->currentHRotation, Player.Object.Position + new Vector3(-C.NoclipSpeed, 0, 0));
                     Svc.KeyState.SetRawValue(VirtualKey.D, 0);
-                    GameObject_Extend.SetObjectPos(Player.GameObject, newPoint.X, newPoint.Y, newPoint.Z);
+                    Player.GameObject->SetPosition(newPoint.X, newPoint.Y, newPoint.Z);
                 }
             }
         }

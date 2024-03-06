@@ -89,14 +89,14 @@ public unsafe class CompassWindow : Window
             ImGui.SameLine();
             if (ImGuiEx.IconButton("\uf3c5"))
             {
-                GameObject_Extend.SetObjectPos(Player.GameObject, PlayerPosition.X, PlayerPosition.Y, PlayerPosition.Z);
+                Player.GameObject->SetPosition(PlayerPosition.X, PlayerPosition.Y, PlayerPosition.Z);
             }
             ImGuiEx.Tooltip("Teleport to the configured coordinates.");
             ImGui.SameLine();
             if (ImGuiEx.IconButton("\uf030"))
             {
-                var cam = (CameraEx*)CameraManager.Instance->GetActiveCamera();
-                GameObject_Extend.SetObjectPos(Player.GameObject, cam->x, cam->y, cam->z);
+                var cam = (CameraEx*)CameraManager.Instance()->GetActiveCamera();
+                Player.GameObject->SetPosition(cam->x, cam->y, cam->z);
             }
             ImGuiEx.Tooltip("Teleport to the location of the camera.");
             ImGui.SameLine();

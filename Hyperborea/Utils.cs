@@ -183,7 +183,7 @@ public unsafe static class Utils
         return Vector3.DistanceSquared(v, o) < 1;
     }
   
-    public static Vector3 CameraPos => *(Vector3*)((nint)CameraManager.Instance->GetActiveCamera() + 0x60);
+    public static Vector3 CameraPos => *(Vector3*)((nint)CameraManager.Instance()->GetActiveCamera() + 0x60);
 
     public static bool TryFindBytes(this byte[] haystack, byte[] needle, out int pos)
     {
@@ -268,7 +268,7 @@ public unsafe static class Utils
         {
             if (setPosition && value.Spawn != null)
             {
-                GameObject_Extend.SetObjectPos(Player.GameObject,value.Spawn.X, value.Spawn.Y, value.Spawn.Z);
+                Player.GameObject->SetPosition(value.Spawn.X, value.Spawn.Y, value.Spawn.Z);
             }
             if (setPhase && value.Phases.Count > 0)
             {
@@ -295,7 +295,7 @@ public unsafe static class Utils
         if (Svc.Condition[ConditionFlag.Mounted]) Memory.CreateAndSetupMount(Player.Character, 0, 0, 0, 0, 0, 0);
         if (UI.SavedPos != null)
         {
-            GameObject_Extend.SetObjectPos(Player.GameObject,UI.SavedPos.Value.X, UI.SavedPos.Value.Y, UI.SavedPos.Value.Z);
+            Player.GameObject->SetPosition(UI.SavedPos.Value.X, UI.SavedPos.Value.Y, UI.SavedPos.Value.Z);
         }
         if (UI.SavedZoneState != null)
         {
