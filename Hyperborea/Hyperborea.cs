@@ -21,7 +21,7 @@ namespace Hyperborea;
 
 public unsafe class Hyperborea : IDalamudPlugin
 {
-    string IDalamudPlugin.Name => "Hyperborea";
+    string Name => "Hyperborea";
 
     public static Hyperborea P;
     public Memory Memory;
