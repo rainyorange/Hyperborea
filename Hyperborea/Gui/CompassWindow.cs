@@ -133,7 +133,7 @@ public unsafe class CompassWindow : Window
             ImGui.SameLine();
             if (ImGuiEx.IconButton("\uf206"))
             {
-                Memory.CreateAndSetupMount(Player.Character, (short)(Svc.Condition[ConditionFlag.Mounted] ? 0 : C.CurrentMount), 0, 0, 0, 0, 0);
+                Player.Character->Mount.CreateAndSetupMount((short)(Svc.Condition[ConditionFlag.Mounted] ? 0 : C.CurrentMount), 0, 0, 0, 0, 0, 0);
             }
 
             ImGui.SameLine();

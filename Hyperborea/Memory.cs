@@ -49,23 +49,12 @@ public unsafe class Memory
 
     internal byte* ActiveScene;
 
-    public delegate void CreateAndSetupMountFn(nint _this, short mountId, uint buddyModelTop, uint buddyModelBody, uint buddyModelLegs, byte buddyStain, byte unk6);
-    public static CreateAndSetupMountFn _CreateAndSetupMount;
-
     public Memory()
     {
         EzSignatureHelper.Initialize(this);
         ActiveScene = (byte*)(((nint)EnvManager.Instance()) + 36);
 
-        _CreateAndSetupMount = Marshal.GetDelegateForFunctionPointer<CreateAndSetupMountFn>(Svc.SigScanner.ScanText("40 ?? 56 41 ?? 41 ?? 48 ?? ?? ?? 45 ?? ?? 45"));
-
         PluginLog.Log($"{Marshal.GetFunctionPointerForDelegate(PacketDispatcher_OnSendPacketHook.Delegate):X}");
-    }
-
-    // 48 83 EC ? 0F B6 44 24 78 48 81 C1 ? ? ? ?
-    public static void CreateAndSetupMount(Character* obj, short mountId, uint buddyModelTop, uint buddyModelBody, uint buddyModelLegs, byte buddyStain, byte unk6)
-    {
-        _CreateAndSetupMount((nint) obj + 0x660, mountId, buddyModelTop, buddyModelBody, buddyModelLegs, buddyStain, unk6);
     }
 
     internal nint IsFlightProhibitedDetour(nint a1)
