@@ -124,7 +124,7 @@ public unsafe class EditorWindow : Window
                     {
                         ImGuiEx.TextV($"Name:");
                         ImGui.SameLine();
-                        ImGuiEx.SetNextItemWidthScaled(150f);
+                        ImGui.SetNextItemWidth(150f);
                         ImGui.InputText($"##Name", ref p.Name, 20);
                         ImGui.SameLine();
                         if (ImGuiEx.IconButton(FontAwesomeIcon.Trash) && ImGuiEx.Ctrl)
@@ -172,13 +172,13 @@ public unsafe class EditorWindow : Window
                         foreach (var x in p.MapEffects)
                         {
                             ImGui.PushID(x.GUID);
-                            ImGuiEx.SetNextItemWidthScaled(100f);
+                            ImGui.SetNextItemWidth(100f);
                             ImGui.InputInt($"##a1", ref x.a1);
                             ImGui.SameLine();
-                            ImGuiEx.SetNextItemWidthScaled(100f);
+                            ImGui.SetNextItemWidth(100f);
                             ImGui.InputInt($"##a2", ref x.a2);
                             ImGui.SameLine();
-                            ImGuiEx.SetNextItemWidthScaled(100f);
+                            ImGui.SetNextItemWidth(100f);
                             ImGui.InputInt($"##a3", ref x.a3);
                             ImGui.SameLine();
                             if (ImGui.Button("Delete"))
