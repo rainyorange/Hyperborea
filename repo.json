@@ -1,0 +1,22 @@
+[
+  {
+    "Author": "kawaii",
+    "Name": "Hyperborea",
+    "Punchline": "What if we GPosed in the Mordion Gaol?",
+    "Description": "Load and explore any zone in relative safety, mainly for taking GPoses in now inaccessible locations.",
+    "Tags": [
+      "gpose"
+    ],
+    "InternalName": "Hyperborea",
+    "RepoUrl": "https://github.com/kawaii/Hyperborea",
+    "DownloadCount": 1380,
+    "LastUpdate": 1707837954224,
+    "DownloadLinkInstall": "https://puni.sh/api/plugins/download/45/Hyperborea/versions/latest.zip",
+    "DownloadLinkUpdate": "https://puni.sh/api/plugins/download/45/Hyperborea/versions/latest.zip",
+    "AssemblyVersion": "1.0.0.8",
+    "ApplicableVersion": "2024.02.21.0000.0000",
+    "DalamudApiLevel": "9",
+    "Changelog": "for CN opcode",
+    "IconUrl": "https://s3.puni.sh/media/plugin/45/icon-jat15i16tp.png"
+  }
+]
