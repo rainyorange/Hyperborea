@@ -1,0 +1,104 @@
+name: Release
+
+# Add a concurrency group incase a tag is created, deleted, and then recreated while a release is in progress.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Only run this workflow manually
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag_name:
+        description: 'Version'
+        required: true
+        default: '1.0.0.9'
+
+# So we can use the GitHub API to create releases with the run token.
+permissions:
+  contents: write
+
+jobs:
+  Release:
+    if: github.event.pull_request.draft == false # Ignore draft PRs
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Hyperborea/
+        shell: bash
+    env:
+      DALAMUD_HOME: /tmp/dalamud
+      IsCI: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          submodules: true # Grab any submodules that may be required
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Download Dalamud Library
+        run: |
+          wget https://github.com/ottercorp/dalamud-distrib/raw/main/stg/latest.7z -O /tmp/dalamud.7z
+          
+      - name: Extract Dalamud Library
+        uses: DuckSoft/extract-7z-action@v1.0
+        with:
+          pathSource: /tmp/dalamud.7z
+          pathTarget: /tmp/dalamud
+
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Build plugin in release mode
+        run: dotnet build -c Release --no-restore --nologo -o ./bin/Release
+
+      - name: Generate Checksums
+        working-directory: Hyperborea/bin/Release/Hyperborea
+        run: |
+          sha512sum latest.zip >> checksums.sha512
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            Hyperborea/bin/Release/Hyperborea/latest.zip
+            Hyperborea/bin/Release/Hyperborea/checksums.sha512
+          prerelease: false # Releases cant be marked as prereleases as Dalamud wont be able to find them
+          append_body: true # Append the release notes to the release body
+          body_path: .github/release-notices.md # These notes are automatically added to the release body every time.
+          generate_release_notes: true # Automatically makes a release body from PRs since the last release.
+          fail_on_unmatched_files: true # If the files arent found, fail the workflow and abort the release.
+          tag_name: 'v${{ github.event.inputs.release_tag_name }}'
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Release Artifacts
+          path: |
+            Hyperborea/bin/Release/Hyperborea/latest.zip
+            Hyperborea/bin/Release/Hyperborea/checksums.sha512
+
+      - name: Update repo.json
+        run: |
+          cd ../
+
+          release_version=${{ github.event.inputs.release_tag_name }}
+          repo_url=$(echo ${{ github.server_url }}/${{ github.repository }} | sed 's/#/\\#/g')
+
+          sed -i repo.json -E \
+              -e 's#"AssemblyVersion": "([0-9]*\.){2,3}[0-9]*"#"AssemblyVersion": "'"$release_version"'"#g' \
+              -e 's#"TestingAssemblyVersion": "([0-9]*\.){2,3}[0-9]*"#"TestingAssemblyVersion": "'"$release_version"'"#' \
+              -e 's#"DownloadLinkInstall": "[^"]*"#"DownloadLinkInstall": "'"$repo_url/releases/download/v$release_version/latest.zip"'"#g' \
+              -e 's#"DownloadLinkTesting": "[^"]*"#"DownloadLinkTesting": "'"$repo_url/releases/download/v$release_version/latest.zip"'"#g' \
+              -e 's#"DownloadLinkUpdate": "[^"]*"#"DownloadLinkUpdate": "'"$repo_url/releases/download/v$release_version/latest.zip"'"#g'
+
+          git add repo.json
+          git config --local user.name "github-actions [bot]"
+          git config --local user.email "github-actions@users.noreply.github.com"
+          git commit -m "Update repo.json for ${{ github.ref_name }}"
+          
+          git push origin HEAD:main
