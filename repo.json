@@ -14,7 +14,7 @@
     "DownloadLinkInstall": "https://github.com/rainyorange/Hyperborea/releases/download/v1.0.0.9/latest.zip",
     "DownloadLinkUpdate": "https://github.com/rainyorange/Hyperborea/releases/download/v1.0.0.9/latest.zip",
     "AssemblyVersion": "1.0.0.9",
-    "ApplicableVersion": "2024.02.21.0000.0000",
+    "ApplicableVersion": "2024.03.28.0000.0000",
     "DalamudApiLevel": "9",
     "Changelog": "for CN opcode",
     "IconUrl": "https://s3.puni.sh/media/plugin/45/icon-jat15i16tp.png"
